@@ -372,6 +372,7 @@ export class MessageData {
   async addTag(
     tag: string,
     messageId: ObjectID,
+    userId: ObjectID,
   ): Promise<ChatMessage> {
       const query = { _id: messageId };
       const updateDocument = {
