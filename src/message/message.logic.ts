@@ -680,19 +680,24 @@ export class MessageLogic implements IMessageLogic {
     tag: TagDto,
     authenticatedUser: IAuthenticatedUser,
   ) {
-        await this.throwForbiddenErrorIfNotAuthorized(
-          authenticatedUser,
-          tag.messageId,
-          Action.readConversation,
-        );
-
+      if(!await this.permissions.messagePermissions({
+        user: authenticatedUser,
+        messageId: String(tag.messageId),
+        action: Action.addTagToMessage,
+      }))
+        {
+          throw new ForbiddenError(`User is not authorised to add tags to this message`);
+        }
+     
         const message = await this.messageData.addTag(
           tag.tag,
-          tag.messageId
+          tag.messageId,
+          tag.userId
         );
 
         return message;
     }
+
 
   private validateOption(
     message: ChatMessageModel,
