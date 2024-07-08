@@ -132,6 +132,7 @@ const replyMessageModel: ChatMessageModel = {
   resolved: false,
   likes: [],
   likesCount: 0,
+  tags: []
 };
 
 const USER_BLOCK_DTO = {
@@ -162,6 +163,7 @@ describe('MessageLogic', () => {
     resolved: false,
     likes: [],
     likesCount: 0,
+    tags: []
   };
 
   const mockGifMessage = {
@@ -192,6 +194,7 @@ describe('MessageLogic', () => {
     resolved: false,
     likes: [],
     likesCount: 0,
+    tags: [],
     richContent: {
       reply: {
         id: messageId,
@@ -254,6 +257,7 @@ describe('MessageLogic', () => {
         id: messageId,
         deleted: true,
         resolved: false,
+        tags: []
       };
     }
 
@@ -269,6 +273,7 @@ describe('MessageLogic', () => {
         id: messageId,
         deleted: false,
         resolved: true,
+        tags: []
       };
     }
 
@@ -284,6 +289,7 @@ describe('MessageLogic', () => {
         id: messageId,
         deleted: false,
         resolved: false,
+        tags: []
       };
     }
 
@@ -300,6 +306,7 @@ describe('MessageLogic', () => {
         deleted: false,
         resolved: false,
         likes: [],
+        tags: []
       };
     }
 
@@ -316,6 +323,7 @@ describe('MessageLogic', () => {
         deleted: false,
         resolved: false,
         likes: [],
+        tags: []
       };
     }
 
@@ -338,6 +346,7 @@ describe('MessageLogic', () => {
           likes: [],
           likesCount: 0,
           isSenderBlocked: false,
+          tags: []
         },
 
         {
@@ -354,6 +363,7 @@ describe('MessageLogic', () => {
           likes: [],
           likesCount: 0,
           isSenderBlocked: false,
+          tags: []
         },
       ];
 
@@ -382,6 +392,7 @@ describe('MessageLogic', () => {
         deleted: false,
         resolved: false,
         likes: [],
+        tags: []
       };
     }
 
