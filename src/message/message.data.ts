@@ -90,7 +90,7 @@ export class MessageData {
   async delete(messageId: ObjectID): Promise<ChatMessage> {
     const filterBy = { _id: messageId }; 
     const updateProperty = { deleted: true };
-    const resolved = await this.chatMessageModel.findOneAndUpdate(
+    const deleted = await this.chatMessageModel.findOneAndUpdate(
       filterBy,
       updateProperty,
       {
@@ -98,8 +98,8 @@ export class MessageData {
         returnOriginal: false,
       },
     );
-    if (!resolved) throw new Error('The message to delete does not exist');
-    return chatMessageToObject(resolved);
+    if (!deleted) throw new Error('The message to delete does not exist');
+    return chatMessageToObject(deleted);
   }
 
   async resolve(messageId: ObjectID): Promise<ChatMessage> {
