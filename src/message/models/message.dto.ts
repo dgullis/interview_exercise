@@ -187,5 +187,8 @@ export class TagDto {
   messageId: ObjectID;
 
   @Field(() => ObjectID)
+  userId: ObjectID;
+
+  @Field(() => ObjectID)
   conversationId: ObjectID;
 }
