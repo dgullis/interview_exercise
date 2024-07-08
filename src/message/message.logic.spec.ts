@@ -8,6 +8,7 @@ import {
   GifType,
   MessageDto,
   PollDto,
+  TagDto,
 } from './models/message.dto';
 import {
   ConversationChannel,
@@ -424,7 +425,14 @@ describe('MessageLogic', () => {
         this.getMockMessage(messageId.toHexString(), userId.toHexString()),
       );
     }
+
+    addTag(tag: string, messageId: ObjectID, userId: ObjectId) {
+      return Promise.resolve(
+        this.getMockMessage(messageId.toHexString(), userId.toHexString()),
+      );
+    }
   }
+
 
   class MockPermissionsService {
     conversationPermissions() {
@@ -1457,4 +1465,31 @@ describe('MessageLogic', () => {
       ).rejects.toEqual(expectedError);
     });
   });
-});
+
+  describe('add Tag to message', () => {
+    it('should be defined', () => {
+      expect(messageLogic.addTagToMessage).toBeDefined();
+    });
+
+    it('should be able to add a tag to an existing message', async () => {
+      jest
+        .spyOn(messageData, 'getMessage')
+        .mockReturnValue(Promise.resolve(mockCreatedMessage))
+      jest.spyOn(messageData, 'addTag')
+
+      await messageLogic.addTagToMessage(
+        {
+          tag: 'Test Tag',
+          messageId,
+          userId: validUser.userId,
+          conversationId: new ObjectId
+        },
+        validUser
+        
+      )
+
+      expect(messageData.addTag).toHaveBeenCalledTimes(1)
+    });
+
+  })
+})
