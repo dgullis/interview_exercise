@@ -13,6 +13,7 @@ import {
   ResolveMessageDto,
   ReactionDto,
   PollOptionDto,
+  TagDto
 } from './models/message.dto';
 import { MessageData } from './message.data';
 import { IAuthenticatedUser } from '../authentication/jwt.strategy';
@@ -674,6 +675,24 @@ export class MessageLogic implements IMessageLogic {
       option,
     );
   }
+
+  async addTagToMessage(
+    tag: TagDto,
+    authenticatedUser: IAuthenticatedUser,
+  ) {
+        await this.throwForbiddenErrorIfNotAuthorized(
+          authenticatedUser,
+          tag.messageId,
+          Action.readConversation,
+        );
+
+        const message = await this.messageData.addTag(
+          tag.tag,
+          tag.messageId
+        );
+
+        return message;
+    }
 
   private validateOption(
     message: ChatMessageModel,
