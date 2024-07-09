@@ -170,6 +170,16 @@ export class MessageResolver {
   text(@Parent() message: ChatMessage): string {
     return this.safeguardingService.clean(message.text);
   }
+
+  @Mutation(() => ChatMessage)
+  @UseGuards(GqlAuthGuard)
+  async addTagToMessage(
+    @Args('tagDto') tagDto: TagDto, 
+    @AuthenticatedUser() authenticatedUser: IAuthenticatedUser,
+  ): Promise<ChatMessage> {
+    return await this.messageLogic.addTagToMessage(tagDto, authenticatedUser);
+  }
+
 }
 
 @Resolver(() => RichMessageContent)
@@ -218,14 +228,5 @@ export class RichMessageContentResolver {
     );
 
     return response.richContent?.poll;
-  }
-
-  @Mutation(() => ChatMessage)
-  @UseGuards(GqlAuthGuard)
-  async addTagToMessage(
-    @Args('tagDto') tagDto: TagDto, 
-    @AuthenticatedUser() authenticatedUser: IAuthenticatedUser,
-  ): Promise<ChatMessage> {
-    return await this.messageLogic.addTagToMessage(tagDto, authenticatedUser);
   }
 }
