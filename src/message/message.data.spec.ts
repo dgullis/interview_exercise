@@ -134,8 +134,8 @@ describe('MessageData', () => {
         senderId,
       );
 
-      const messagewithTag = await messageData.addTag('test', new ObjectID(message.id), senderId);
-      expect(messagewithTag).toMatchObject({
+      const messageWithTag = await messageData.addTag('test', new ObjectID(message.id), senderId);
+      expect(messageWithTag).toMatchObject({
         likes: [],
         resolved: false,
         deleted: false,
