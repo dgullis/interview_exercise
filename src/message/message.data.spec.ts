@@ -83,6 +83,7 @@ describe('MessageData', () => {
           conversation: { id: conversationId.toHexString() },
           likesCount: 0,
           sender: { id: senderId.toHexString() },
+          tags: []
         }
       );
 
@@ -124,4 +125,30 @@ describe('MessageData', () => {
       expect(deletedMessage.deleted).toEqual(true);
     });
   });
+
+  describe('addTag', () => {
+    it ('successfully adds a tag to a message', async () => {
+      const conversationId = new ObjectID();
+      const message = await messageData.create(
+        { conversationId, text: 'Message to tag' },
+        senderId,
+      );
+
+      const messageWithTag = await messageData.addTag('test', new ObjectID(message.id), senderId);
+      expect(messageWithTag).toMatchObject({
+        likes: [],
+        resolved: false,
+        deleted: false,
+        reactions: [],
+        text: 'Message to tag',
+        senderId: senderId,
+        conversationId: conversationId,
+        conversation: { id: conversationId.toHexString() },
+        likesCount: 0,
+        sender: { id: senderId.toHexString() },
+        tags: ['test']
+      }
+    );
+    })
+  })
 });

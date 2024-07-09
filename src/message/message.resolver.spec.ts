@@ -12,6 +12,7 @@ import {
   LikeMessageDto,
   ReactionDto,
   PollDto,
+  TagDto,
 } from './models/message.dto';
 import { ObjectID } from 'mongodb';
 import { IAuthenticatedUser } from '../authentication/jwt.strategy';
@@ -194,6 +195,13 @@ describe('MessageResolver', () => {
       messagesFilterInput: MessagesFilterInput,
     ): Promise<MessageGroupedByConversationOutput[]> {
       return Promise.resolve([]);
+    }
+
+    addTagToMessage(
+      TagDto: TagDto,
+      authenticatedUser?: IAuthenticatedUser,
+    ): Promise<ChatMessage> {
+      return Promise.resolve(chatMessage);
     }
   }
 
@@ -563,6 +571,32 @@ describe('MessageResolver', () => {
       );
     });
   });
+
+  describe('addTagToMessage', () => {
+    it('should be defined', () => {
+      expect(resolver.addTagToMessage).toBeDefined();
+    });
+
+    it('should be able to add a tag to a message', () => {  
+      jest.spyOn(messageLogic, 'addTagToMessage');
+
+      const tagDto: TagDto = {
+        tag: 'Test Tag',
+        messageId,
+        userId,
+        conversationId,
+      };
+
+      resolver.addTagToMessage(tagDto, authenticatedUser);
+
+      expect(messageLogic.addTagToMessage).toBeCalledWith(
+        tagDto,
+        authenticatedUser,
+      );
+    });
+  });
+
+
 });
 
 describe('RichMessageContentResolver', () => {
@@ -597,6 +631,13 @@ describe('RichMessageContentResolver', () => {
     removeVote(
       messageId: ObjectID,
       option: string,
+      authenticatedUser?: IAuthenticatedUser,
+    ): Promise<ChatMessage> {
+      return Promise.resolve(chatMessage);
+    }
+
+    addTagToMessage(
+      TagDto: TagDto,
       authenticatedUser?: IAuthenticatedUser,
     ): Promise<ChatMessage> {
       return Promise.resolve(chatMessage);
@@ -667,4 +708,5 @@ describe('RichMessageContentResolver', () => {
       );
     });
   });
-});
+}); 
+

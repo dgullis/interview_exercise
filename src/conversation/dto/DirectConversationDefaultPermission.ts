@@ -48,4 +48,14 @@ export const DirectConversationDefaultPermissions = [
       universityId: { $in: 'conversation.universityIds' },
     },
   },
+  {
+    action: Action.addTagToMessage,
+    subject: Subject.user,
+    conditions: {
+      userId: {
+        $eq: 'message.senderId',
+        $nin: 'conversation.blockedMemberIds',
+      },
+    },
+  },
 ];

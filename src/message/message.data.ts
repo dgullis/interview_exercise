@@ -368,4 +368,26 @@ export class MessageData {
 
     return chatMessageToObject(updatedResult);
   }
+
+  async addTag(
+    tag: string,
+    messageId: ObjectID,
+    userId: ObjectID,
+  ): Promise<ChatMessage> {
+      const query = { _id: messageId };
+      const updateDocument = {
+            $addToSet: { tags: tag },
+          };
+
+      const updatedMessage = await this.chatMessageModel.findOneAndUpdate(
+        query,
+        updateDocument,
+        {
+          new: true,
+          returnOriginal: false
+        }
+      );
+      if (!updatedMessage) throw new Error('The message does not exist');
+      return chatMessageToObject(updatedMessage)
+  }
 }

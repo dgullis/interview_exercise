@@ -8,6 +8,7 @@ import {
   GifType,
   MessageDto,
   PollDto,
+  TagDto,
 } from './models/message.dto';
 import {
   ConversationChannel,
@@ -132,6 +133,7 @@ const replyMessageModel: ChatMessageModel = {
   resolved: false,
   likes: [],
   likesCount: 0,
+  tags: []
 };
 
 const USER_BLOCK_DTO = {
@@ -162,6 +164,7 @@ describe('MessageLogic', () => {
     resolved: false,
     likes: [],
     likesCount: 0,
+    tags: []
   };
 
   const mockGifMessage = {
@@ -192,6 +195,7 @@ describe('MessageLogic', () => {
     resolved: false,
     likes: [],
     likesCount: 0,
+    tags: [],
     richContent: {
       reply: {
         id: messageId,
@@ -254,6 +258,7 @@ describe('MessageLogic', () => {
         id: messageId,
         deleted: true,
         resolved: false,
+        tags: []
       };
     }
 
@@ -269,6 +274,7 @@ describe('MessageLogic', () => {
         id: messageId,
         deleted: false,
         resolved: true,
+        tags: []
       };
     }
 
@@ -284,6 +290,7 @@ describe('MessageLogic', () => {
         id: messageId,
         deleted: false,
         resolved: false,
+        tags: []
       };
     }
 
@@ -300,6 +307,7 @@ describe('MessageLogic', () => {
         deleted: false,
         resolved: false,
         likes: [],
+        tags: []
       };
     }
 
@@ -316,6 +324,7 @@ describe('MessageLogic', () => {
         deleted: false,
         resolved: false,
         likes: [],
+        tags: []
       };
     }
 
@@ -338,6 +347,7 @@ describe('MessageLogic', () => {
           likes: [],
           likesCount: 0,
           isSenderBlocked: false,
+          tags: []
         },
 
         {
@@ -354,6 +364,7 @@ describe('MessageLogic', () => {
           likes: [],
           likesCount: 0,
           isSenderBlocked: false,
+          tags: []
         },
       ];
 
@@ -382,6 +393,7 @@ describe('MessageLogic', () => {
         deleted: false,
         resolved: false,
         likes: [],
+        tags: []
       };
     }
 
@@ -413,7 +425,14 @@ describe('MessageLogic', () => {
         this.getMockMessage(messageId.toHexString(), userId.toHexString()),
       );
     }
+
+    addTag(tag: string, messageId: ObjectID, userId: ObjectId) {
+      return Promise.resolve(
+        this.getMockMessage(messageId.toHexString(), userId.toHexString()),
+      );
+    }
   }
+
 
   class MockPermissionsService {
     conversationPermissions() {
@@ -1446,4 +1465,31 @@ describe('MessageLogic', () => {
       ).rejects.toEqual(expectedError);
     });
   });
-});
+
+  describe('add Tag to message', () => {
+    it('should be defined', () => {
+      expect(messageLogic.addTagToMessage).toBeDefined();
+    });
+
+    it('should be able to add a tag to an existing message', async () => {
+      jest
+        .spyOn(messageData, 'getMessage')
+        .mockReturnValue(Promise.resolve(mockCreatedMessage))
+      jest.spyOn(messageData, 'addTag')
+
+      await messageLogic.addTagToMessage(
+        {
+          tag: 'Test Tag',
+          messageId,
+          userId: validUser.userId,
+          conversationId: new ObjectId
+        },
+        validUser
+        
+      )
+
+      expect(messageData.addTag).toHaveBeenCalledTimes(1)
+    });
+
+  })
+})

@@ -13,6 +13,7 @@ import {
   ResolveMessageDto,
   ReactionDto,
   PollOptionDto,
+  TagDto
 } from './models/message.dto';
 import { MessageData } from './message.data';
 import { IAuthenticatedUser } from '../authentication/jwt.strategy';
@@ -674,6 +675,29 @@ export class MessageLogic implements IMessageLogic {
       option,
     );
   }
+
+  async addTagToMessage(
+    tag: TagDto,
+    authenticatedUser: IAuthenticatedUser,
+  ) {
+      if(!await this.permissions.messagePermissions({
+        user: authenticatedUser,
+        messageId: String(tag.messageId),
+        action: Action.addTagToMessage,
+      }))
+        {
+          throw new ForbiddenError(`User is not authorised to add tags to this message`);
+        }
+     
+        const message = await this.messageData.addTag(
+          tag.tag,
+          tag.messageId,
+          tag.userId
+        );
+
+        return message;
+    }
+
 
   private validateOption(
     message: ChatMessageModel,
